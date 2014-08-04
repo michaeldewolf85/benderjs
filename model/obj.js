@@ -5,17 +5,29 @@
 
 /**
  *	The render object.
+ *
+ *	@param array renderArray
+ *		The render array to work with.
  */
-function benderRender(renderArray)	{
+function RenderInterface(renderArray)	{
 
 	/**
-	 *	@var array renderArray
-	 *		The render array to work with
+	 *	@var array DOMData
+	 *		The render array to work with.
 	 */
-	this.renderArray;
+	this.DOMData;
 
 	 /**
 	  *	Construction logic.
 	  */
-	this.renderArray = renderArray;
+	this.DOMData = renderArray;
+}
+
+/**
+ *
+ */
+RenderInterface.prototype.renderDOMData = function()	{
+	for (var x in this.DOMData) {
+		console.log(this.DOMData[x]);
+	}
 }
