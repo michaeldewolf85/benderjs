@@ -27,9 +27,7 @@ function RenderInterface(renderObj)	{
  *	Build the DOM from DOMData.
  */
 RenderInterface.prototype.buildDOM = function()	{
-	for (var x in this.DOMData) {
-
-	}
+	this.buildRenderElement(this.DOMData);
 }
 
 /**
@@ -39,16 +37,20 @@ RenderInterface.prototype.buildDOM = function()	{
  *		The element to render.
  */
 RenderInterface.prototype.buildRenderElement = function(elem)	{
-
+	for (var x in elem) {
+		if (this.isRenderable(elem[x])) {
+			this.buildRenderElement(elem[x]);
+		}
+	}
 }
 
 /**
  *	Helper function that checks whether a property name is renderable. A 
  *	wrapper for checking if the first letter of the property label is "(".
  *
- *	@param string label
- *		The label to check for.
+ *	@param object elem
+ *		The object to check.
  */
-RenderInterface.prototype.isRenderable = function(label)	{
-	return label.charAt(0) === '(' ? true : false;
+RenderInterface.prototype.isRenderable = function(elem)	{
+	return typeof elem == 'object' && elem.type ? true : false;
 }
