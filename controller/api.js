@@ -11,5 +11,5 @@
  */
 function benderRender(renderArray)	{
 	var renderInterface = new RenderInterface(renderArray);
-	renderInterface.renderDOMData();
+	renderInterface.buildDOM();
 }

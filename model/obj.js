@@ -26,7 +26,7 @@ function RenderInterface(renderArray)	{
 /**
  *
  */
-RenderInterface.prototype.renderDOMData = function()	{
+RenderInterface.prototype.buildDOM = function()	{
 	for (var x in this.DOMData) {
 		console.log(this.DOMData[x]);
 	}
