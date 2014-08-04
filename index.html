@@ -2,10 +2,33 @@
 <html>
 	<head>
 		<title>benderJS</title>
-		<script src="bender.js"></script>
+		<script src="model/obj.js"></script>
+		<link rel="stylesheet" src="view/style.css" type="text/css" />
+		<script src="controller/api.js"></script>
 	</head>
 	<body>
 		<h1>benderJS</h1>
 		<h2>A Javascript markup framework</h2>
+		<script>
+
+
+			var sampleMarkup = {
+				"paragraph1": {
+					")type": "p",
+					")attributes": {
+						"class": ["text-content"],
+						"id": "sample",
+						"style": "color: blue;",
+					},
+					")value": "This is a paragraph",
+					")weight": 1
+				}
+			};
+
+			console.log(sampleMarkup);
+
+
+
+		</script>
 	</body>
 </html>
