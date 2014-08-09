@@ -28,7 +28,6 @@ function RenderInterface(renderObj)	{
  */
 RenderInterface.prototype.buildElements = function()	{
 	this.DOMData = this.buildRenderElement(this.DOMData);
-	console.log(this.DOMData);
 }
 
 /**
@@ -58,6 +57,12 @@ RenderInterface.prototype.isRenderable = function(elem)	{
 	return (typeof elem == 'object' && elem.type) ? true : false;
 }
 
+/**
+ *	Helper function to render the array as a dom object.
+ *
+ *	@param object elementObj
+ *		The render object as passed into this class.
+ */
 RenderInterface.prototype.renderNode = function(elementObj)	{
 	elementObj.element = document.createElement(elementObj.type);
 	for (var x in elementObj) {
@@ -70,6 +75,14 @@ RenderInterface.prototype.renderNode = function(elementObj)	{
 	return elementObj;
 }
 
+/**
+ *	Add attributes to a DOM object.
+ *
+ *	@param object elementObj
+ *		Th DOM element object.
+ *	@param object attributes
+ *		An object describing the attributes to add to the element.
+ */
 RenderInterface.prototype.addAttributes = function(elementObj, attributes)	{
 	for (var x in attributes) {
 		switch (x) {
