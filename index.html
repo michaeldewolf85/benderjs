@@ -20,8 +20,17 @@
 						"style": "font-size: 100px;",
 					},
 					"textContent": "A header with a prefix",
-					"weight": 0,
-					"prefix": "<div id='example-prefix'>"
+					"weight": 0
+				},
+				"exampleDivWithChild": {
+					"type": "div",
+					"attributes": {
+						"id": "sample-div-with-child"
+					},
+					"child": {
+						"type": "p",
+						"textContent": "this is a child element"
+					}
 				},
 				"exampleBody": {
 					"type": "p",
@@ -42,7 +51,6 @@
 					},
 					"textContent": "A link. with a suffix that closes the headers prefix above.",
 					"weight": 2,
-					"suffix": "</div>"
 				},
 				"exampleHTML": {
 					"type": "html",

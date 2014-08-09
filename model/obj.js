@@ -29,6 +29,7 @@ function RenderInterface(renderObj)	{
 	 *	Construction logic.
 	 */
 	this.DOMData = this.buildRenderElement(renderObj);
+	this.processHTML();
 	this.renderedOutput = this.DOMDataToArray();
 }
 
@@ -92,7 +93,6 @@ RenderInterface.prototype.renderNode = function(elementObj)	{
 				break;
 		}
 	}
-	elementObj.html = this.DOMDataToString(elementObj.element);
 	return elementObj;
 }
 
@@ -167,17 +167,36 @@ RenderInterface.prototype.DOMDataToArray = function()	{
 
 	var len = temp.length;
 	for (var i = 0; i < len; i++) {
-		temp[i] = temp[i].prefix + temp[i].html + temp[i].suffix;
+		temp[i] = temp[i].html;
 	}
 	return temp;
 }
 
 /**
- *	Format rendered output as a string.
+ *	Add rendered output to DOM Data.
  *
  *	@return string
  *		An html string.
  */
+RenderInterface.prototype.processHTML = function()	{
+	for (var x in this.DOMData) {
+		this.processChildren(this.DOMData[x]);
+		this.DOMData[x].html = this.DOMData[x].html ? this.DOMData[x].html : this.DOMDataToString(this.DOMData[x].element);
+	}
+}
+
+/**
+ *	Recurse over children and append them to their parents
+ */
+RenderInterface.prototype.processChildren = function(elem)	{
+	for (var x in elem) {
+		if (this.isRenderable(elem[x])) {
+			elem.element.appendChild(elem[x].element);
+			this.processChildren(elem[x]);
+		}
+	}
+}
+
 RenderInterface.prototype.toHTMLString = function()	{
 	return this.renderedOutput.join('\n');
 }
@@ -194,12 +213,6 @@ RenderInterface.prototype.toHTMLString = function()	{
 RenderInterface.prototype.setDefaults = function(elementObj)	{
 	if (!elementObj.weight) {
 		elementObj.weight = 0;
-	}
-	if (!elementObj.prefix) {
-		elementObj.prefix = '';
-	}
-	if (!elementObj.suffix) {
-		elementObj.suffix = '';
 	}
 	return elementObj;
 }
