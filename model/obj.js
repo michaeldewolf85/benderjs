@@ -120,7 +120,7 @@ RenderInterface.prototype.addAttributes = function(elementObj, attributes)	{
 RenderInterface.prototype.DOMDataToString = function()	{
 	var div = document.createElement('div');
 	for (var x in this.DOMData) {
-		if (this.DOMData.html) {
+		if (this.DOMData[x].html) {
 			continue;
 		}
 		div.appendChild(this.DOMData[x].element);
