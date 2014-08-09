@@ -29,7 +29,6 @@ function RenderInterface(renderObj)	{
 	 *	Construction logic.
 	 */
 	this.DOMData = this.buildRenderElement(renderObj);
-	this.DOMDataToString();
 	this.renderedOutput = this.DOMDataToArray();
 }
 
@@ -38,11 +37,15 @@ function RenderInterface(renderObj)	{
  *
  *	@param object elem
  *		The element to render.
+ *
+ *	@return object
+ *		The element, modified to include each elements html.
  */
 RenderInterface.prototype.buildRenderElement = function(elem)	{
 	for (var x in elem) {
 		if (this.isRenderable(elem[x])) {
-			if (elem[x].html) {
+			elem[x] = this.setDefaults(elem[x]);
+			if (elem[x].type == 'html') {
 				continue;
 			}
 			elem[x] = this.renderNode(elem[x]);
@@ -58,6 +61,11 @@ RenderInterface.prototype.buildRenderElement = function(elem)	{
  *
  *	@param object elem
  *		The object to check.
+ *
+ *	@return boolean
+ *		A boolean indicating whether or not the given render object property
+ *		is renderable and should be treated to an additional layer of
+ *		processing.
  */
 RenderInterface.prototype.isRenderable = function(elem)	{
 	return (typeof elem == 'object' && elem.type) ? true : false;
@@ -68,12 +76,12 @@ RenderInterface.prototype.isRenderable = function(elem)	{
  *
  *	@param object elementObj
  *		The render object as passed into this class.
+ *
+ *	@return object
+ *		The DOM Element.
  */
 RenderInterface.prototype.renderNode = function(elementObj)	{
 	elementObj.element = document.createElement(elementObj.type);
-	if (!elementObj.weight) {
-		elementObj.weight = 0;
-	}
 	for (var x in elementObj) {
 		switch (x) {
 			case 'attributes':
@@ -84,6 +92,7 @@ RenderInterface.prototype.renderNode = function(elementObj)	{
 				break;
 		}
 	}
+	elementObj.html = this.DOMDataToString(elementObj.element);
 	return elementObj;
 }
 
@@ -94,6 +103,9 @@ RenderInterface.prototype.renderNode = function(elementObj)	{
  *		Th DOM element object.
  *	@param object attributes
  *		An object describing the attributes to add to the element.
+ *
+ *	@return object
+ *		The modified DOM element object.
  */
 RenderInterface.prototype.addAttributes = function(elementObj, attributes)	{
 	for (var x in attributes) {
@@ -116,21 +128,24 @@ RenderInterface.prototype.addAttributes = function(elementObj, attributes)	{
 
 /**
  *	Convert the DOM object to a string.
+ *
+ *	@param object elem
+ *		The DOM Object t get html for.
+ *
+ *	@return string
+ *		An HTML string representing the DOM object.
  */
-RenderInterface.prototype.DOMDataToString = function()	{
+RenderInterface.prototype.DOMDataToString = function(elem)	{
 	var div = document.createElement('div');
-	for (var x in this.DOMData) {
-		if (this.DOMData[x].html) {
-			continue;
-		}
-		div.appendChild(this.DOMData[x].element);
-		this.DOMData[x].html = div.innerHTML;
-		div.removeChild(div.childNodes[0]);
-	}
+	div.appendChild(elem);
+	return div.innerHTML;
 }
 
 /**
  *	Sort the DOM object by weight.
+ *
+ *	@return array
+ *		An array of html ordered by weight.
  */
 RenderInterface.prototype.DOMDataToArray = function()	{
 	var temp = [];
@@ -152,11 +167,39 @@ RenderInterface.prototype.DOMDataToArray = function()	{
 
 	var len = temp.length;
 	for (var i = 0; i < len; i++) {
-		temp[i] = temp[i].html;
+		temp[i] = temp[i].prefix + temp[i].html + temp[i].suffix;
 	}
 	return temp;
 }
 
+/**
+ *	Format rendered output as a string.
+ *
+ *	@return string
+ *		An html string.
+ */
 RenderInterface.prototype.toHTMLString = function()	{
 	return this.renderedOutput.join('\n');
+}
+
+/**
+ *	Set defaults on an element in case of missing values.
+ *
+ *	@param object elementObj
+ *		The element object.
+ *
+ *	@return object
+ *		The modified element object.
+ */
+RenderInterface.prototype.setDefaults = function(elementObj)	{
+	if (!elementObj.weight) {
+		elementObj.weight = 0;
+	}
+	if (!elementObj.prefix) {
+		elementObj.prefix = '';
+	}
+	if (!elementObj.suffix) {
+		elementObj.suffix = '';
+	}
+	return elementObj;
 }

@@ -12,38 +12,41 @@
 		<script>
 
 			var sampleMarkup = {
-				"header": {
+				"exampleHeader": {
 					"type": "h1",
 					"attributes": {
 						"class": ["text-header"],
 						"id": "header",
 						"style": "font-size: 100px;",
 					},
-					"textContent": "Hey There",
-					"weight": 0
+					"textContent": "A header with a prefix",
+					"weight": 0,
+					"prefix": "<div id='PAPA'>"
 				},
-				"body": {
+				"exampleBody": {
 					"type": "p",
 					"attributes": {
 						"class": ["text-content"],
 						"id": "sample",
 						"style": "color: blue;",
 					},
-					"textContent": "This be js",
+					"textContent": "A paragraph of content.",
 					"weight": 1
 				},
-				"linktime": {
+				"exampleLink": {
 					"type": "a",
 					"attributes": {
 						"class": ["linkie"],
 						"id": "sample23",
 						"href": "http://www.google.com"
 					},
-					"textContent": "This is a link.",
-					"weight": 2
+					"textContent": "A link. with a suffix that closes the headers prefix above.",
+					"weight": 2,
+					"suffix": "</div>"
 				},
-				"linktime": {
-					"html": "<h3>BOOOOOOOOOM!</h3>",
+				"exampleHTML": {
+					"type": "html",
+					"html": "<span>Some custom html</span>",
 					"weight": 34
 				}
 			};
