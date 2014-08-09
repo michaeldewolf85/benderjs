@@ -190,7 +190,7 @@ RenderInterface.prototype.processHTML = function()	{
  */
 RenderInterface.prototype.processChildren = function(elem)	{
 	for (var x in elem) {
-		if (this.isRenderable(elem[x])) {
+		if (this.isRenderable(elem[x]) && elem[x].type != 'html') {
 			elem.element.appendChild(elem[x].element);
 			this.processChildren(elem[x]);
 		}
