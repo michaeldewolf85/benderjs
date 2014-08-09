@@ -11,7 +11,6 @@
 		<h2>A Javascript markup framework</h2>
 		<script>
 
-
 			var sampleMarkup = {
 				"header": {
 					"type": "h1",
@@ -20,6 +19,7 @@
 						"id": "header",
 						"style": "font-size: 100px;",
 					},
+					"textContent": "Hey There",
 					"weight": 0
 				},
 				"body": {
@@ -29,10 +29,11 @@
 						"id": "sample",
 						"style": "color: blue;",
 					},
+					"textContent": "This be js",
 					"weight": 1
 				}
 			};
-			benderRender(sampleMarkup);
+			document.write(benderRender(sampleMarkup));
 
 		</script>
 	</body>

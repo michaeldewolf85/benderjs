@@ -12,22 +12,25 @@
 function RenderInterface(renderObj)	{
 
 	/**
-	 *	@var array DOMData
-	 *		The render array to work with.
+	 *	@var object DOMData
+	 *		The render array to work with. An object which stores all of the 
+	 *		data about our dom element.
 	 */
 	this.DOMData;
 
-	 /**
-	  *	Construction logic.
-	  */
-	this.DOMData = renderObj;
-}
+	/**
+	 *	@var array renderedOutput
+	 *		An array of the entity's html, sorted by weight and ready to 
+	 *		print.
+	 */
+	this.renderedOutput;
 
-/**
- *	Build the DOM from DOMData.
- */
-RenderInterface.prototype.buildElements = function()	{
-	this.DOMData = this.buildRenderElement(this.DOMData);
+	/**
+	 *	Construction logic.
+	 */
+	this.DOMData = this.buildRenderElement(renderObj);
+	this.DOMDataToString();
+	this.renderedOutput = this.DOMDataToArray();
 }
 
 /**
@@ -39,6 +42,9 @@ RenderInterface.prototype.buildElements = function()	{
 RenderInterface.prototype.buildRenderElement = function(elem)	{
 	for (var x in elem) {
 		if (this.isRenderable(elem[x])) {
+			if (elem[x].html) {
+				continue;
+			}
 			elem[x] = this.renderNode(elem[x]);
 			elem[x] = this.buildRenderElement(elem[x]);
 		}
@@ -65,10 +71,16 @@ RenderInterface.prototype.isRenderable = function(elem)	{
  */
 RenderInterface.prototype.renderNode = function(elementObj)	{
 	elementObj.element = document.createElement(elementObj.type);
+	if (!elementObj.weight) {
+		elementObj.weight = 0;
+	}
 	for (var x in elementObj) {
 		switch (x) {
 			case 'attributes':
 				elementObj = this.addAttributes(elementObj, elementObj[x]);
+				break;
+			case 'textContent':
+				elementObj.element.textContent = elementObj[x];
 				break;
 		}
 	}
@@ -100,4 +112,51 @@ RenderInterface.prototype.addAttributes = function(elementObj, attributes)	{
 		}
 	}
 	return elementObj;
+}
+
+/**
+ *	Convert the DOM object to a string.
+ */
+RenderInterface.prototype.DOMDataToString = function()	{
+	var div = document.createElement('div');
+	for (var x in this.DOMData) {
+		if (this.DOMData.html) {
+			continue;
+		}
+		div.appendChild(this.DOMData[x].element);
+		this.DOMData[x].html = div.innerHTML;
+		div.removeChild(div.childNodes[0]);
+	}
+}
+
+/**
+ *	Sort the DOM object by weight.
+ */
+RenderInterface.prototype.DOMDataToArray = function()	{
+	var temp = [];
+	var currentMax = 0;
+	for (var x in this.DOMData) {
+		temp.push(this.DOMData[x]);
+	}
+	temp.sort(function(a, b)	{
+		if (b.weight < a.weight) {
+			return 1;
+		}
+		else if (a.weight > b.weight) {
+			return -1
+		}
+		else {
+			return 0;
+		}
+	});
+
+	var len = temp.length;
+	for (var i = 0; i < len; i++) {
+		temp[i] = temp[i].html;
+	}
+	return temp;
+}
+
+RenderInterface.prototype.toHTMLString = function()	{
+	return this.renderedOutput.join('\n');
 }
